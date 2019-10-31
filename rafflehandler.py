@@ -16,7 +16,7 @@ class Rafflehandler:
 
     async def run(self):
         producer =  self.produce()
-        consumers = [ self.consume() for i in range(100) ]  # 同步等待礼物冷却 
+        consumers = [ self.consume() for i in range(200) ]  # 同步等待礼物冷却 
         consumers.append(producer)
 
         done, pending = await asyncio.wait(
@@ -28,15 +28,16 @@ class Rafflehandler:
                 raise task.exception()
 
     async def consume(self):
-        gift_data = await self.list_TV_waiting.get()
-        if gift_data['time_wait'] > 0:
-            await asyncio.sleep(gift_data['time_wait'])
-        await bilibiliCilent.handle_1_TV_raffle(
-            gift_data['type'], 
-            5, 
-            gift_data['roomid'], 
-            gift_data['id'], 
-        )
+        while True:
+            gift_data = await self.list_TV_waiting.get()
+            if gift_data['time_wait'] > 0:
+                await asyncio.sleep(gift_data['time_wait'])
+            await bilibiliCilent.handle_1_TV_raffle(
+                gift_data['type'], 
+                5, 
+                gift_data['roomid'], 
+                gift_data['id'], 
+            )
 
 
     async def produce(self):
