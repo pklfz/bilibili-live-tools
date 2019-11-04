@@ -24,7 +24,6 @@ biliconsole.Biliconsole()
 task = OnlineHeart()
 task1 = Silver()
 task2 = Tasks()
-task3 = LotteryResult()
 task4 = connect()
 task5 = PKLottery()
 
@@ -42,7 +41,6 @@ tasks = [
     task2.run(),
     biliconsole.Biliconsole().run(),
     task4.create(),
-    task3.query(),
     rafflehandler.run(),
     task5.run()
 ]
