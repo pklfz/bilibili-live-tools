@@ -17,7 +17,13 @@ async def handle_1_TV_raffle(type, num, real_roomid, raffleid):
     json_response2 = await response2.json(content_type=None)
     Printer().printer(f"参与房间 {real_roomid} 广播道具抽奖 {raffleid} 状态: {json_response2['msg']}", "Lottery", "cyan")
     if json_response2['code'] == 0:
-        Statistics().append_to_TVlist(raffleid, real_roomid)
+        data = json_response2['data']
+        if 'guard' == type:
+            award = data.get('award_text', '')
+        else:
+            award = data.get('award_name', '')
+            award += f'+{data.get("award_num", "")}'
+        Printer().printer(f'ID {raffleid:<9} {award}', 'Lottery', 'green')
     else:
         print(json_response2)
 
